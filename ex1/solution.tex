@@ -1,0 +1,32 @@
+\documentclass{scrartcl}
+\usepackage[headsepline]{scrlayer-scrpage}
+\pagestyle{scrheadings}
+\usepackage[a4paper, left=3cm, right=3cm, top=3cm]{geometry}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tikz}
+
+\begin{document}
+	
+	\title{Machine Learning}
+	\subtitle{Exercise 1}
+	\author{Jan Kruska}
+	\date{\today}
+	%\publishers{Platz für Betreuer o.\,ä.}% optional
+	
+	\maketitle
+	
+	\section*{Question 2}
+	\subsection*{a)}
+	$p(apple) = p(r\cap apple) + p(g\cap apple) + p(b\cap apple)$ \\
+	$p(apple) = p(r) * p(apple|r) + p(g) * p(apple|g) + p(b) * p(apple|b)$ \\
+	$p(apple) = 0.2 * \frac{3}{10} + 0.6 * \frac{3}{10} + 0.2 * \frac{1}{2} = 0.34 $
+	
+	\subsection*{b)}
+	$p(g|orange) = \frac{p(orange|g)p(g)}{p(orange)}$ \\
+	$p(orange) = p(r) * p(orange|r) + p(g) * p(orange|g) + p(b) * p(orange|b)$ \\
+	$p(g|orange) = \frac{p(orange|g)p(g)}{p(r) * p(orange|r) + p(g) * p(orange|g) + p(b) * p(orange|b)}$ \\
+	$p(g|orange) = \frac{0.3*0.6}{0.2*0.4 + 0.6*0.3 + 0.2*0.5} = 0.5$ \\
+\end{document}
