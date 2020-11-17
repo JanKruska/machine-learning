@@ -9,6 +9,7 @@ def kde(samples, h):
     # Output
     #  estDensity : estimated density in the range of [-5,5]
 
-    #####Insert your code here for subtask 5a#####
+    pos = np.arange(-5, 5.0, 0.1)
+    val = np.random.normal(0, 1, 100)
     # Compute the number of samples created
-    return estDensity
+    return np.stack([pos,val]).transpose()

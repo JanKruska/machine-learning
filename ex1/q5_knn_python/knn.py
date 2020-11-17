@@ -9,6 +9,8 @@ def knn(samples, k):
     # Output
     #  estDensity : estimated density in the range of [-5, 5]
 
-    #####Insert your code here for subtask 5b#####
-    # Compute the number of the samples created
-    return estDensity
+    pos = np.arange(-5, 5.0, 0.1)
+    n = samples.shape[0]
+    val = [k/(2*n*(np.linalg.norm(np.sort(np.abs(samples-i))[k-1]))) for i in pos]
+    # Compute the number of samples created
+    return np.stack([pos,val]).transpose()
