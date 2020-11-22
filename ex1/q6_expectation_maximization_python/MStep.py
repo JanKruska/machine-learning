@@ -1,5 +1,6 @@
 import numpy as np
 from getLogLikelihood import getLogLikelihood
+from regularize_cov import regularize_cov
 
 
 def MStep(gamma, X):
@@ -19,5 +20,15 @@ def MStep(gamma, X):
     # weights        : Vector of weights of each gaussian (1xK).
     # covariances    : Covariance matrices for each component(DxDxK).
 
-    #####Insert your code here for subtask 6c#####
-    return weights, means, covariances, logLikelihood
+    n_k = np.sum(gamma,0)
+    covariances = np.empty([X.shape[1],X.shape[1],gamma.shape[1]])
+
+    means = np.array([np.dot(gamma[:,k],X)/n_k[k] for k in range(gamma.shape[1])])
+    for k in range(gamma.shape[1]):
+        # elementwise product of (DxN)(N) => DxN dot-product NxD => DxD
+        covariances[:,:,k] = np.dot(np.transpose(X-means[k])*gamma[:,k],X-means[k]) / n_k[k]
+        #Regularize to avoid numerical anomalies
+        covariances[:,:,k] = regularize_cov(covariances[:,:,k],.1**10)
+    weights = n_k / X.shape[0]
+
+    return weights, means, covariances, getLogLikelihood(means,weights,covariances,X)
