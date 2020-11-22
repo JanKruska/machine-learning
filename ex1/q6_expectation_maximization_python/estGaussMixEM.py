@@ -19,11 +19,10 @@ def estGaussMixEM(data, K, n_iters, epsilon):
     # covariances    : covariancesariance matrices of gaussians
     # logLikelihood  : log-likelihood of the data given the model
 
-    #####Insert your code here for subtask 6e#####
     n_dim = data.shape[1]
-    weights = np.ones(K)/K
+    weights = np.ones(K) / K
 
-    kmeans = KMeans(n_clusters=K, n_init=10).fit(data)
+    kmeans = KMeans(n_clusters=K,n_init=10).fit(data)
     cluster_idx = kmeans.labels_
     means = kmeans.cluster_centers_
 
@@ -32,9 +31,10 @@ def estGaussMixEM(data, K, n_iters, epsilon):
         data_cluster = data[cluster_idx==j]
         min_dist = np.inf
         for i in range(K):
+            #compute sum of distances
             dist = np.mean(euclidean_distances(data_cluster,[means[j]],squared=True))
-            if dist<min_dist:
-                min_dist=dist
+            if dist < min_dist:
+                min_dist = dist
         covariances[:,:,j] = np.eye(n_dim) * min_dist
 
     for i in range(n_iters):
