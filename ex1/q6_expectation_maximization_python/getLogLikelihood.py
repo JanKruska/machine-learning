@@ -14,9 +14,9 @@ def getLogLikelihood(means, weights, covariances, X):
     # OUTPUT:
     # logLikelihood  : log-likelihood
 
-    return np.sum([np.log(gauss_mix(x, means, weights, covariances)) for x in X])
+    return np.sum([np.log(gaussian_mix(x, means, weights, covariances)) for x in X])
 
-def gauss_mix(x, means, weights, covariances):
+def gaussian_mix(x, means, weights, covariances):
     return np.sum([weights[k]*gaussian(x,means[k],covariances[:,:,k]) for k in range(len(weights))])
 
 def gaussian(x,mu,sigma):
