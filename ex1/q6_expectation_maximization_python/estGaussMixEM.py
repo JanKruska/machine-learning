@@ -37,9 +37,21 @@ def estGaussMixEM(data, K, n_iters, epsilon):
                 min_dist = dist
         covariances[:,:,j] = np.eye(n_dim) * min_dist
 
+    lastLikelihood = 1
+
     for i in range(n_iters):
-        _, gamma = EStep(means, covariances, weights, data)
+        loglikelihood, gamma = EStep(means, covariances, weights, data)
         weights, means, covariances, _ = MStep(gamma, data)
         for k in range(K):
             covariances[:,:,k] = regularize_cov(covariances[:,:,k], epsilon)
+
+        if i!=0:
+            print('Iteration {}: \t\t Abs-Gain: {} \t\t %-Gain {}'.format(i,loglikelihood-lastLikelihood,loglikelihood/lastLikelihood))
+            if(loglikelihood-lastLikelihood<epsilon):
+                break
+            else:
+                lastLikelihood = loglikelihood
+        else:
+            print('Iteration {}: \t\t Abs-Value: {}'.format(i, loglikelihood))
+            lastLikelihood = loglikelihood
     return [weights, means, covariances]
