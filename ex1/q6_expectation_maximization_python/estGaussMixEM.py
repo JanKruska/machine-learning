@@ -40,5 +40,6 @@ def estGaussMixEM(data, K, n_iters, epsilon):
     for i in range(n_iters):
         _, gamma = EStep(means, covariances, weights, data)
         weights, means, covariances, _ = MStep(gamma, data)
-        #covariances = regularize_cov(covariances[:,:,i], epsilon)
+        for k in range(K):
+            covariances[:,:,k] = regularize_cov(covariances[:,:,k], epsilon)
     return [weights, means, covariances]
