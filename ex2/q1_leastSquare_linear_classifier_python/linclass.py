@@ -11,6 +11,7 @@ def linclass(weight, bias, data):
 
     #####Insert your code here for subtask 1b#####
     # Perform linear classification i.e. class prediction
+    class_pred = weight*data + bias
     return class_pred
 
 

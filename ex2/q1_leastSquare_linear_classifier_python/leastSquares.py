@@ -15,4 +15,17 @@ def leastSquares(data, label):
     #####Insert your code here for subtask 1a#####
     # Extend each datapoint x as [1, x]
     # (Trick to avoid modeling the bias term explicitly)
+
+    data_mean = np.mean(data)
+    label_mean = np.mean(label)
+
+    num = den = 0
+
+    for i in range(len(data)):
+        num += (data[i] - data_mean) * (label[i] - label_mean)
+        den += (data[i] - data_mean)**2
+
+    weight = num/den
+    bias = label_mean - (weight * data_mean)
+
     return weight, bias
