@@ -24,8 +24,9 @@ def _EStep(means, covariances, weights, X):
     k = len(weights)
     gamma = np.empty([n, k])
     for i in range(n):
+        norm = gaussian_mix(X[i,:],means,weights,covariances)
         for j in range(k):
-            gamma[i,j] = (weights[j]*gaussian(X[i,:],means[j],covariances[:,:,j]))/gaussian_mix(X[i,:],means,weights,covariances)
+            gamma[i,j] = (weights[j]*gaussian(X[i,:],means[j],covariances[:,:,j]))/norm
 
     return [getLogLikelihood(means, weights, covariances, X), gamma]
 
@@ -66,7 +67,6 @@ def EStep(means, covariances, weights, X):
 
     n = X.shape[0]
     k = len(weights)
-    gamma = np.empty([n,k])
     init_persistent_data(weights,X,means,covariances)
 
     with Pool() as pl:
