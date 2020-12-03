@@ -2,7 +2,7 @@ import numpy as np
 # might need to add path to mingw-w64/bin for cvxopt to work
 # import os
 # os.environ["PATH"] += os.pathsep + ...
-import cvxopt
+from cvxopt import matrix, solvers
 
 
 def svmlin(X, t, C):
@@ -21,6 +21,23 @@ def svmlin(X, t, C):
     # result   : result of classification     (1 x num_samples)
     # slack    : points inside the margin (boolean)   (1 x num_samples)
 
+    n = X.shape[0]
+    K = np.matmul(X, X.T)
+    P = matrix(np.matmul(t, t.T) * K)
+    q = matrix(np.ones((n, 1)) * -1)
+    A = matrix(t.reshape(1, -1))
+    b = matrix(np.zeros(1))
+    G = matrix(np.eye(n) * -1)
+    h = matrix(np.zeros(n))
 
-    #####Insert your code here for subtask 2a#####
+    solution = solvers.qp(P, q, G, h, A, b)
+    alpha = np.squeeze(solution['x'])
+
+    sv = alpha > 0.000000001
+    w = np.dot(alpha*t,X)
+    #b = np.mean(t[sv] - np.diagonal(np.dot(alpha[sv]*t[sv]*X,X[sv].T)))
+    b = np.mean(t[sv] - np.sum(np.dot(X[sv],X[sv].T) * alpha[sv] * t[sv], axis=1))
+    b = 0.00
+    result = np.sum(np.matmul(X[sv], X[sv].T) * alpha[sv] * t[sv], axis=0) + b
+    slack = np.array([])
     return alpha, sv, w, b, result, slack

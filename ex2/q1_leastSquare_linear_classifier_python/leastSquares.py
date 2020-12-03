@@ -20,7 +20,7 @@ def leastSquares(data, label):
     label_mean = np.mean(label)
 
     num = np.dot(np.transpose(data-data_mean[np.newaxis,:]),label - label_mean)
-    den = np.diagonal(np.dot(np.transpose(data-data_mean[np.newaxis,:]),data-data_mean[np.newaxis,:]))
+    den = np.diagonal(np.dot((data-data_mean[np.newaxis,:]).T,data-data_mean[np.newaxis,:]))
 
     weight = num[1:]/den[1:]
     bias = label_mean - np.dot(weight,data_mean[1:])
