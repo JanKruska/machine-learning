@@ -20,25 +20,26 @@ def svmlin(X, t, C):
     # b        : bias of the classifier       (scalar)
     # result   : result of classification     (1 x num_samples)
     # slack    : points inside the margin (boolean)   (1 x num_samples)
-
+    #C = 1/C
     n = X.shape[0]
     K = np.matmul(X, X.T)
-    P = matrix(np.matmul(t, t.T) * K)
+    P = matrix(np.matmul(t[:,np.newaxis], t[np.newaxis,:]) * K)
     q = matrix(np.ones((n, 1)) * -1)
-    G = matrix(np.vstack([-np.eye(n), np.eye(n)]))
-    h = matrix(np.hstack([0, C]))
-    A = matrix(t)
+    A = matrix(t.reshape(1, -1))
     b = matrix(np.zeros(1))
+
+    G = matrix(np.vstack([np.eye(n) * -1,np.eye(n)]))
+    h = matrix(np.hstack([np.zeros(n),C*np.ones(n)]))
     
 
     solution = solvers.qp(P, q, G, h, A, b)
     alpha = np.squeeze(solution['x'])
 
-    sv = alpha > 0.000000001
+    sv = alpha > 5*1e-4
     w = np.dot(alpha*t,X)
     #b = np.mean(t[sv] - np.diagonal(np.dot(alpha[sv]*t[sv]*X,X[sv].T)))
     b = np.mean(t[sv] - np.sum(np.dot(X[sv],X[sv].T) * alpha[sv] * t[sv], axis=1))
-    b = 0.00
+    #b = 0.00
     result = np.sum(np.matmul(X[sv], X[sv].T) * alpha[sv] * t[sv], axis=0) + b
     slack = np.array([])
     return alpha, sv, w, b, result, slack
