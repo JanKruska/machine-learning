@@ -25,10 +25,11 @@ def svmlin(X, t, C):
     K = np.matmul(X, X.T)
     P = matrix(np.matmul(t, t.T) * K)
     q = matrix(np.ones((n, 1)) * -1)
-    A = matrix(t.reshape(1, -1))
+    G = matrix(np.vstack([-np.eye(n), np.eye(n)]))
+    h = matrix(np.hstack([0, C]))
+    A = matrix(t)
     b = matrix(np.zeros(1))
-    G = matrix(np.eye(n) * -1)
-    h = matrix(np.zeros(n))
+    
 
     solution = solvers.qp(P, q, G, h, A, b)
     alpha = np.squeeze(solution['x'])
