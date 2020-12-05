@@ -50,7 +50,7 @@ plt.ylim(ymin-ymargin, ymax+ymargin)
 
 # Plot the slack points
 if sum(slack) > 0:
-    plt.plot(train['data'][slack][:,0], train['data'][sv][:, 1], facecolors='none', edgecolors='y', marker='o')
+    plt.scatter(train['data'][slack][:,0], train['data'][slack][:, 1], facecolors='none', edgecolors='y', marker='o')
 
 x = np.arange(-xmax, xmax, 0.001)
 y = -(w[0] * x + b)/w[1]
