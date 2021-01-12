@@ -80,7 +80,7 @@ if __name__ == '__main__':
     # Define/train model
     my_model = None
     if FLAGS.train:  # should we train the model?
-        task = FLAGS.task[0]
+        task = FLAGS.task
         if task == 2:
             my_model = train_model_task2(FLAGS.data_train, FLAGS.labels_train)
         elif task == 3:

@@ -109,14 +109,39 @@ class LossModule(NNModule):
 class Linear(NNModule):
     """Module which implements a linear layer"""
 
-    #####Insert your code here for subtask 2a#####
+    def __init__(self,n_in,n_out):
+        self.weights = np.ones([n_in,n_out])
+
+    def fprop(self, input):
+        self.cache_in = np.array(input)
+        return np.matmul(input,self.weights)
+
+    def bprop(self, grad_out):
+        return np.matmul(grad_out,self.weights.T)
+
+    def get_grad_param(self, grad_out):
+        return np.matmul(self.cache_in.T,grad_out)
+
+    def apply_parameter_update(self, acc_grad_para, up_fun):
+        self.weights += 1
 
 
 # Task 2 b)
 class Softmax(NNModuleParaFree):
     """Softmax layer"""
 
-    #####Insert your code here for subtask 2b#####
+    def fprop(self, input):
+        e = np.exp(input)
+        self.cache_out = e/np.sum(e,axis=1)[:,np.newaxis]
+        return self.cache_out
+
+    def bprop(self, grad_out):
+        n = self.cache_out.shape[1]
+        tensor1 = np.einsum('ij,ik->ijk', self.cache_out, self.cache_out)
+        tensor2 = np.einsum('ij,jk->ijk', self.cache_out, np.eye(n, n))
+        dSoftmax = tensor2 - tensor1
+        dz = np.einsum('ijk,ik->ij', dSoftmax, grad_out)
+        return dz
 
 
 # Task 2 c)
